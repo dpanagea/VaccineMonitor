@@ -49,8 +49,8 @@ do
     #if id doesn't exist, then add it
     if [[ ! " ${id_array[@]} " =~ " ${id} " ]]; then 
         id_array+=($id)
-        fname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 12 | head -n 1)
-        lname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 12 | head -n 1)
+        fname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 5 | head -n 1)
+        lname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 9 | head -n 1)
         country=$(shuf $countriesFile -n 1) 
         virus=$(shuf $virusesFile -n 1)
         echo "$id: $fname $lname $country $virus"
@@ -70,4 +70,3 @@ do
 done
 
 
-echo ${id_array[@]}
