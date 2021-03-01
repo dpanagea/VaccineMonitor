@@ -34,8 +34,8 @@ fi
 file="inputFile"
 touch $file
 declare -a id_array 
-
-for ((i = 1; i <= $numLines; i++))
+#if duplicates are allowed, then I want 1% chance for a rec to have a duplicate
+for ((i = 1; i <= $((numLines-numdups)); i++))
 do
     #random id
     idLow=0
@@ -46,25 +46,24 @@ do
         id=$RANDOM 
         let "id %= idHigh"
     done
-    #check if id already exists. if duplicates allowed, then you can add.
-    if [[ ! " ${id_array[@]} " =~ " ${id} " ]]; then #if not exist, then add, no prob
+    #if id doesn't exist, then add it
+    if [[ ! " ${id_array[@]} " =~ " ${id} " ]]; then 
         id_array+=($id)
-    else #id already exists, check duplicates variable. only when 1, add to array
-        if [ $duplicates -eq "1" ]; then
+    fi
+    if [ "$duplicates" -eq 1 ]; then
+        ran=-1
+        while [ "$ran" -le 0 ]
+        do
+            ran=$RANDOM
+            let "ran %= 100"
+        done
+        if [ "$ran" -le 1 ]; then
+            echo "$ran"
             id_array+=($id)
+            let "i = i+1"
         fi
     fi
 done
-#bubblesort for id_array
-for ((i=0;i<"${#id_array[@]}";i++))
-do
-    for ((j=0;j<"${#id_array[@]}";j++))
-    do
-        if [[ ${id_array[$i]} -le "${id_array[$j]}" ]]; then
-            t=${id_array[$i]}
-            id_array[$i]=${id_array[$j]}
-            id_array[$j]=$t
-        fi
-    done
-done
+
+
 echo ${id_array[@]}
