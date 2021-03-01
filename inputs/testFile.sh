@@ -49,6 +49,11 @@ do
     #if id doesn't exist, then add it
     if [[ ! " ${id_array[@]} " =~ " ${id} " ]]; then 
         id_array+=($id)
+        fname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 12 | head -n 1)
+        lname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 12 | head -n 1)
+        country=$(shuf $countriesFile -n 1) 
+        virus=$(shuf $virusesFile -n 1)
+        echo "$id: $fname $lname $country $virus"
     fi
     if [ "$duplicates" -eq 1 ]; then
         ran=-1
@@ -58,7 +63,6 @@ do
             let "ran %= 100"
         done
         if [ "$ran" -le 1 ]; then
-            echo "$ran"
             id_array+=($id)
             let "i = i+1"
         fi
