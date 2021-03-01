@@ -14,7 +14,7 @@ fi
 #check if numLines is a positive number
 [ -n "$3" ] && [ "$3" -eq "$3" ] && [ $3 -gt 0 ] 2>/dev/null    
 if [ $? -ne 0 ]; then
-    echo "numFilesPerDirectory input is either not a number or <0"; exit -1
+    echo "numLines is either not a number or <0"; exit -1
 fi
 
 #check if duplicatesAllowed is 0 or 1
@@ -35,7 +35,8 @@ file="inputFile"
 touch $file
 declare -a id_array 
 #if duplicates are allowed, then I want 1% chance for a rec to have a duplicate
-for ((i = 1; i <= $((numLines-numdups)); i++))
+i=1
+while [ "$i" -le $numLines ]
 do
     #random id
     idLow=0
@@ -46,26 +47,113 @@ do
         id=$RANDOM 
         let "id %= idHigh"
     done
-    #if id doesn't exist, then add it
+    #if id doesn't exist, then create record
     if [[ ! " ${id_array[@]} " =~ " ${id} " ]]; then 
         id_array+=($id)
+        #random names
         fname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 5 | head -n 1)
         lname=$(cat /dev/urandom | tr -dc 'A-Za-z' | fold -w 9 | head -n 1)
+        #random country from txt
         country=$(shuf $countriesFile -n 1) 
-        virus=$(shuf $virusesFile -n 1)
-        echo "$id: $fname $lname $country $virus"
-    fi
-    if [ "$duplicates" -eq 1 ]; then
-        ran=-1
-        while [ "$ran" -le 0 ]
+        #random age
+        ageLow=1
+        ageHigh=120
+        age=0
+        while [ "$age" -le $ageLow ]
         do
+            age=$RANDOM
+            let "age %= ageHigh"
+        done
+        #random virus from txt 
+        virus=$(shuf $virusesFile -n 1)
+        #random answer YES/NO
+        B=2
+        bin=$RANDOM
+        let "bin %= B"
+        if [ "$bin" -eq 1 ]; then
+            vacc=YES
+            #we need to create random date
+            #days
+            dayLow=1
+            dayHigh=30
+            day=0
+            while [ "$day" -le $dayLow ]
+            do
+                day=$RANDOM
+                let "day %= dayHigh"
+            done
+            #month
+            monthLow=1
+            monthHigh=12
+            month=0
+            while [ "$month" -le $monthLow ]
+            do
+                month=$RANDOM
+                let "month %= monthHigh"
+            done
+            yearLow=1990
+            yearHigh=2021
+            year=0
+            while [ "$year" -le $yearLow ]
+            do
+                year=$RANDOM
+                let "year %= yearHigh"
+            done
+            echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> inputFile
+        else 
+            vacc=NO
+            echo "$id $fname $lname $country $age $virus $vacc" >> inputFile
+        fi
+        #check if this id will be duplicated
+        if [ "$duplicates" -eq 1 ]; then
             ran=$RANDOM
             let "ran %= 100"
-        done
-        if [ "$ran" -le 1 ]; then
-            id_array+=($id)
-            let "i = i+1"
+            #if duplicated, then we will keep id, name, country & age the same
+            if [ "$ran" -le 1 ]; then 
+                #random virus from txt 
+                virus=$(shuf $virusesFile -n 1)
+                #random answer YES/NO
+                B=2
+                bin=$RANDOM
+                let "bin %= B"
+                if [ "$bin" -eq 1 ]; then
+                    vacc=YES
+                    #we need to create random date
+                    #days
+                    dayLow=1
+                    dayHigh=30
+                    day=0
+                    while [ "$day" -le $dayLow ]
+                    do
+                        day=$RANDOM
+                        let "day %= dayHigh"
+                    done
+                    #month
+                    monthLow=1
+                    monthHigh=12
+                    month=0
+                    while [ "$month" -le $monthLow ]
+                    do
+                        month=$RANDOM
+                        let "month %= monthHigh"
+                    done
+                    yearLow=1990
+                    yearHigh=2021
+                    year=0
+                    while [ "$year" -le $yearLow ]
+                    do
+                        year=$RANDOM
+                        let "year %= yearHigh"
+                    done
+                    echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> inputFile
+                else 
+                    vacc=NO
+                    echo "$id $fname $lname $country $age $virus $vacc" >> inputFile
+                fi
+                let "i = i+1"
+            fi
         fi
+        let "i = i+1"
     fi
 done
 
