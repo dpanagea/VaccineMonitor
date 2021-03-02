@@ -99,10 +99,10 @@ do
                 year=$RANDOM
                 let "year %= yearHigh"
             done
-            echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> inputFile
+            echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../inputFile
         else 
             vacc=NO
-            echo "$id $fname $lname $country $age $virus $vacc" >> inputFile
+            echo "$id $fname $lname $country $age $virus $vacc" >> ../inputFile
         fi
         #check if this id will be duplicated
         if [ "$duplicates" -eq 1 ]; then
@@ -145,10 +145,10 @@ do
                         year=$RANDOM
                         let "year %= yearHigh"
                     done
-                    echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> inputFile
+                    echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../inputFile
                 else 
                     vacc=NO
-                    echo "$id $fname $lname $country $age $virus $vacc" >> inputFile
+                    echo "$id $fname $lname $country $age $virus $vacc" >> ../inputFile
                 fi
                 let "i = i+1"
             fi
