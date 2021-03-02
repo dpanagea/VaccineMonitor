@@ -32,7 +32,7 @@ fi
 
 #create file
 file="inputFile"
-touch $file
+> ../$file
 declare -a id_array 
 #if duplicates are allowed, then I want 1% chance for a rec to have a duplicate
 i=1
@@ -99,10 +99,10 @@ do
                 year=$RANDOM
                 let "year %= yearHigh"
             done
-            echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../inputFile
+            echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../$file
         else 
             vacc=NO
-            echo "$id $fname $lname $country $age $virus $vacc" >> ../inputFile
+            echo "$id $fname $lname $country $age $virus $vacc" >> ../$file
         fi
         #check if this id will be duplicated
         if [ "$duplicates" -eq 1 ]; then
@@ -145,10 +145,10 @@ do
                         year=$RANDOM
                         let "year %= yearHigh"
                     done
-                    echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../inputFile
+                    echo "$id $fname $lname $country $age $virus $vacc $day-$month-$year" >> ../$file
                 else 
                     vacc=NO
-                    echo "$id $fname $lname $country $age $virus $vacc" >> ../inputFile
+                    echo "$id $fname $lname $country $age $virus $vacc" >> ../$file
                 fi
                 let "i = i+1"
             fi

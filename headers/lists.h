@@ -3,4 +3,14 @@
 
 #include "functions.h"
 
+
+
+typedef struct listnode
+{
+    citizen value;
+    struct listnode* previous;
+    struct listnode* next;    
+}listnode;  
+
+
 #endif
