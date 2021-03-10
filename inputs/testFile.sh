@@ -23,10 +23,10 @@ if [ $duplicates -ne 0 ] && [ $duplicates -ne 1 ]; then
 fi
 
 #check if given files do exist
-if [ ! -f "virusesFile" ]; then
+if [ ! -f "$virusesFile" ]; then
     echo "Error: File with viruses doesn't exist."; exit -1
 fi
-if [ ! -f "countriesFile" ]; then
+if [ ! -f "$countriesFile" ]; then
     echo "Error: File with countries doesn't exist."; exit -1
 fi
 
