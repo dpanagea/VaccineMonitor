@@ -43,4 +43,5 @@ struct citizen* citizenDef(char* buf); /*From buffer, create citizen */
 struct virus* virusDef(char* buf); /*From buffer, create virus */
 struct date* dateDef(char* buf); /*From buffer, create date */
 
+
 #endif
