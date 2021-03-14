@@ -34,14 +34,15 @@ typedef struct record
 {
     struct citizen* person;
     struct virus* disease;
-    char vacc;
+    char* vacc;
     struct date vaccDate;
 }record;
 
-struct record* recordDef(char* buf); /*From buffer, create record */
-struct citizen* citizenDef(char* buf); /*From buffer, create citizen */
-struct virus* virusDef(char* buf); /*From buffer, create virus */
-struct date* dateDef(char* buf); /*From buffer, create date */
+struct virus* virusDef(char*); 
+struct date* dateDef(char*); 
+struct citizen* citizenDef(int, char*, char*, char*, int); 
+struct record* recordDef(citizen*, virus*, char*, date*); 
+
 
 
 #endif
