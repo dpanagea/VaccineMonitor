@@ -24,6 +24,27 @@ int main(int argc, char* argv[])
         bloomSize = atoi(argv[2]);
     }
     /* -----------------------------  */
+    char buf[100]; /* line buffer */ 
+    int numargs;
+    while (fgets(buf, 100, input) != NULL)
+    {
+        record* rec;
+        citizen* cit;
+        virus* disease;
+        date* dat;
+        int id, age;
+        char first[13], last[13], cntr[20], ans[4], date[11], vir[20]; 
+
+        numargs = sscanf(buf, "%d %s %s %s %d %s %s %s\n",
+                        &id, first, last, cntr, &age, vir, ans, date);
+        if((numargs==8 && !strcmp(ans, "yes")) || (numargs==7 && !strcmp(ans, "no"))) /* strcmp when equal, returns 0 */
+        {
+            disease = virusDef(vir);
+            dat = dateDef(date);
+            cit = citizenDef(id, first, last, cntr, age);
+            rec = recordDef(cit, disease, ans, dat);
+        }
+    }
 
 
     return 0;
