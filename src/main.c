@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "../headers/functions.h"
 
 int main(int argc, char* argv[])
@@ -23,29 +20,48 @@ int main(int argc, char* argv[])
         input = fopen(argv[4], "r");
         bloomSize = atoi(argv[2]);
     }
-    /* -----------------------------  */
+    /* variables needed for arguments  */
     char buf[100]; /* line buffer */ 
-    int numargs;
+    int argument;
+    int id, age;
+    char temp[20];
+    char first[13], last[13], cntr[20], ans[4], dt[11], vir[20];
+    /* lists */
+    list *virs, *recs, *cits;
+    virs = listInit();
+    recs = listInit();
+    cits = listInit();
+    listnode *lnode;
+    record *rec;
+    citizen *cit;
+    virus *disease;
+    date *dat;
     while (fgets(buf, 100, input) != NULL)
     {
-        record* rec;
-        citizen* cit;
-        virus* disease;
-        date* dat;
-        int id, age;
-        char first[13], last[13], cntr[20], ans[4], date[11], vir[20]; 
-
-        numargs = sscanf(buf, "%d %s %s %s %d %s %s %s\n",
-                        &id, first, last, cntr, &age, vir, ans, date);
-        if((numargs==8 && !strcmp(ans, "yes")) || (numargs==7 && !strcmp(ans, "no"))) /* strcmp when equal, returns 0 */
-        {
+        argument = sscanf(buf, "%d %s %s %s %d %s %s %s ", &id, first, last, cntr, &age, vir, ans, dt);
+        if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0))
+        {   
             disease = virusDef(vir);
-            dat = dateDef(date);
+            if(argument == 8)
+                dat = dateDef(dt);
+            else   
+                dat = NULL;
             cit = citizenDef(id, first, last, cntr, age);
             rec = recordDef(cit, disease, ans, dat);
+            lnode = nodeInit(cit);
+            listAdd(lnode, cits);
+            /*
+               1)find if virus already in list, else add it
+               --------
+               2)find if there is a duplicate in records. If there is, check
+                 if the second rec can be added. If no duplicate found, 
+                 add to records' and citizens' lists. 
+            */
+        //    recordDel(rec);
         }
+        
     }
-
+    listCitPrint(cits);
 
     return 0;
 }

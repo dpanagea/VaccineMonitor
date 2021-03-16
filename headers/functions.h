@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "hashtable.h"
 #include "lists.h"
 
@@ -35,14 +36,17 @@ typedef struct record
     struct citizen* person;
     struct virus* disease;
     char* vacc;
-    struct date vaccDate;
+    struct date* vaccDate;
 }record;
 
-struct virus* virusDef(char*); 
-struct date* dateDef(char*); 
-struct citizen* citizenDef(int, char*, char*, char*, int); 
-struct record* recordDef(citizen*, virus*, char*, date*); 
+struct virus* virusDef(const char*); 
+struct date* dateDef(const char*); 
+struct citizen* citizenDef(int, const char*, const char*, const char*, int); 
+struct record* recordDef(citizen*, virus*, const char*, date*); 
 
-
+void virusDel(virus*);
+void dateDel(date*);
+void citizenDel(citizen*);
+void recordDel(record*);
 
 #endif

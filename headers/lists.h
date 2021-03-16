@@ -18,9 +18,13 @@ typedef struct list
 }list;
 
 listnode* nodeInit(void*);
-list* listInit(listnode*);
+list* listInit();
 void listAdd(listnode*, list*);
-void listPrint(list*);
+void listCitPrint(list*);
+
+void nodeDel(listnode*, list*);
+void listDel(list*);
+
 
 int virusInList(char*, list*);                   /* check if virus already in list */
 struct record* recInList(int, list*, listnode*); /* check if record with citizen ID exists in list,

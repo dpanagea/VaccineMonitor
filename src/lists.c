@@ -10,12 +10,11 @@ listnode* nodeInit(void* value)
     return new;
 }
 
-list* listInit(listnode* lnode)
+list* listInit()
 {
     list* new = (list*)malloc(sizeof(list));
-    new->head = lnode;
-    new->tail = lnode;
-    new->items++;
+    new->head = NULL;
+    new->tail = NULL;
     
     return new;
 }
@@ -36,16 +35,17 @@ void listAdd(listnode* lnode, list* List) /* adds to the end of the list */
     List->items++;
 }
 
-void listPrint(list* List)
+void listCitPrint(list* List)
 {
     listnode* temp = List->head;
     citizen* current;
     while(temp != NULL && temp->value!=NULL)
     {
         current = temp->value;
-        printf("ID: %d | First name: %s | Last name: %s | Age: %d | Country: %s ", current->id, current->firstname, current->lastname, current->age, current->country);
-
+        printf("%d %s %s %d %s -> \n", current->id, current->firstname, current->lastname, current->age, current->country);
+        printf("Total items in list: %d \n", List->items);
         temp = temp->next;
     }
-
 }
+
+// void nodeDel(lnode, )
