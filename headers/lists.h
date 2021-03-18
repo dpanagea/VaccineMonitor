@@ -22,7 +22,6 @@ list* listInit();
 void listAdd(listnode*, list*);
 void listCitPrint(list*);
 
-void nodeDel(listnode*, list*);
 void listDel(list*);
 
 

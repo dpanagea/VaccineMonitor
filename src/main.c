@@ -27,10 +27,11 @@ int main(int argc, char* argv[])
     char temp[20];
     char first[13], last[13], cntr[20], ans[4], dt[11], vir[20];
     /* lists */
-    list *virs, *recs, *cits;
+    list *virs, *recs, *cits, *cntrs;
     virs = listInit();
     recs = listInit();
     cits = listInit();
+    cntrs = listInit();
     listnode *lnode;
     record *rec;
     citizen *cit;
