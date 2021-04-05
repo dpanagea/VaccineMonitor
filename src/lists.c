@@ -31,6 +31,7 @@ listnode* listAdd(listnode* lnode, list* List) /* adds to the end of the list */
         List->tail->next = lnode;
         lnode->previous = List->tail;
         List->tail = lnode;
+        
     }
     List->items++;
     return List->tail;
@@ -65,7 +66,7 @@ void listPrint(list* List, int type)
             cit = curr->person->value;
             vir = curr->disease->value;
             cntr = cit->origin->value;
-            printf( "%d %s %s %s %d %s %s", cit->id, cit->firstname, cit->lastname, cntr->value, cit->age, vir->value, curr->vacc);
+            printf( "%d %s %s %s %d %s %s ", cit->id, cit->firstname, cit->lastname, cntr->value, cit->age, vir->value, curr->vacc);
             if( curr->vaccDate != NULL)
             {
                 printf("%d-%d-%d", curr->vaccDate->day, curr->vaccDate->month, curr->vaccDate->year);
@@ -147,7 +148,7 @@ struct listnode* countryInList(char *value, list *cntrList)
     return NULL;
 }
 
-record* recInList(int id, list *recList)
+struct listnode* recInList(int id, list *recList)
 {
     record *left, *right;
     citizen *temp;
@@ -160,11 +161,11 @@ record* recInList(int id, list *recList)
         left = front->value;
         temp = left->person->value;
         if(temp->id == id)
-            return left;
+            return front;
         right = rear->value;
         temp = right->person->value;
         if( temp->id == id)
-            return right;
+            return rear;
         if(itemsLeft == 1)  /* only one item in list */
             return NULL;
         itemsLeft-=2;
@@ -180,7 +181,6 @@ void listDel(list *List, int type)
     while (node != NULL)
     {
         List->head = List->head->next;
-        List->head->previous = NULL;
         
         if(type == 0)
             virusDel(node->value);

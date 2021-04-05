@@ -64,7 +64,8 @@ int main(int argc, char* argv[])
             }
 
             cit = citizenDef(id, first, last, cntrNode, age); /* passes all temp buffers & listnode pointers */
-            if( recInList(cit->id, recList) == NULL )       /* if rec not found, then citizen doesn't exist already.
+            recNode = recInList(cit->id, recList);
+            if( recNode == NULL )       /* if rec not found, then citizen doesn't exist already.
                                                                 So, add both cit and rec to their lists. */
             {
                 temp = nodeInit(cit);
@@ -74,21 +75,23 @@ int main(int argc, char* argv[])
                 temp = nodeInit(rec);
                 recNode = listAdd(temp, recList);
             }
-            else{}                                          /* if the recID exists, don't add to cit list BUT check if rec is valid. */
+            else
+            {
+
+            }                                          /* if the recID exists, don't add to cit list BUT check if rec is valid. */
         }
         
     }
-    // Print List works fine -- 0 for virus
+    // Print List works fine 
     //listPrint(virList, 0); 
-    //listPrint(cntrList, 1); 1 for country
-    //listPrint(citList, 2); 2 for citizens
-    //listPrint(recList, 3); 3 for records
+    //listPrint(cntrList, 1);
+    //listPrint(citList, 2); 
+    listPrint(recList, 3); 
 
-//    listDel(recList, 3); 
-
+    listDel(recList, 3); 
     listDel(citList, 2);
-//    listDel(cntrList, 1);
-//    listDel(virList, 0);
+    listDel(cntrList, 1);
+    listDel(virList, 0);
 
     return 0;
 }
