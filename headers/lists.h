@@ -35,5 +35,6 @@ struct record* recInList(int, list*);             /* check if record with citize
                                                     Return the first found.
                                                     No need to check in citizens' list, if there is a rec with
                                                     same ID, then the citizen is already in the list */
+void listDel(list *List, int);
 
 #endif

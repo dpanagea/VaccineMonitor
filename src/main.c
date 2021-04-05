@@ -78,15 +78,17 @@ int main(int argc, char* argv[])
         }
         
     }
-    //listPrint(virList, 0); Print List works fine -- 0 for virus
+    // Print List works fine -- 0 for virus
+    //listPrint(virList, 0); 
     //listPrint(cntrList, 1); 1 for country
     //listPrint(citList, 2); 2 for citizens
     //listPrint(recList, 3); 3 for records
 
-    //listDel(recList, 3); haven't implemented anything on list Deletion
-    //listDel(citList, 2);
-    //listDel(cntrList, 1);
-    //listDel(virList, 0);
+//    listDel(recList, 3); 
+
+    listDel(citList, 2);
+//    listDel(cntrList, 1);
+//    listDel(virList, 0);
 
     return 0;
 }

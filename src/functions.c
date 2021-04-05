@@ -69,3 +69,28 @@ record* recordDef(struct listnode* cit, struct listnode* vir, const char* ans, d
     return rec;
 }
 
+void virusDel(virus* temp)
+{
+    free(temp->value);
+    free(temp);
+}
+
+void countryDel(country* temp)
+{
+    free(temp->value);
+    free(temp);
+}
+
+void citizenDel(citizen* temp)
+{
+    free(temp->firstname);
+    free(temp->lastname);
+    free(temp);
+}
+
+void recordDel(record* temp)
+{
+    free(temp->vacc);
+    free(temp->vaccDate);
+    free(temp);
+}

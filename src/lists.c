@@ -173,4 +173,26 @@ record* recInList(int id, list *recList)
     return NULL;
 }
 
-// void nodeDel(lnode, )
+void listDel(list *List, int type)
+{
+    struct listnode* node = List->head;
+    
+    while (node != NULL)
+    {
+        List->head = List->head->next;
+        List->head->previous = NULL;
+        
+        if(type == 0)
+            virusDel(node->value);
+        else if(type == 1)
+            countryDel(node->value);
+        else if(type == 2)
+            citizenDel(node->value);
+        else
+            recordDel(node->value);
+        
+        free(node);
+        node = List->head;
+    }
+    free(List);
+}

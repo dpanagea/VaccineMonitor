@@ -51,7 +51,6 @@ struct citizen* citizenDef(int, const char*, const char*, struct listnode*, int)
 struct record* recordDef(struct listnode*, struct listnode*, const char*, date*); 
 
 void virusDel(virus*);
-void dateDel(date*);
 void countryDel(country*);
 void citizenDel(citizen*);
 void recordDel(record*);
