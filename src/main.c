@@ -22,47 +22,71 @@ int main(int argc, char* argv[])
     }
     /* variables needed for arguments  */
     char buf[100]; /* line buffer */ 
-    int argument;
-    int id, age;
-    char temp[20];
-    char first[13], last[13], cntr[20], ans[4], dt[11], vir[20];
-    /* lists */
-    list *virs, *recs, *cits, *cntrs;
-    virs = listInit();
-    recs = listInit();
-    cits = listInit();
-    cntrs = listInit();
-    listnode *lnode;
+    int argument;  /* num of args. to check if date is given */
+    int id, age;    
+    char first[13], last[13], origin[20], ans[4], dt[11], vir[20]; /* temp buffers */
+
+    list *virList, *recList, *citList, *cntrList; /* lists */
+    virList = listInit();   /* initialize */
+    recList = listInit();
+    citList = listInit();
+    cntrList = listInit();
+    listnode *temp, *cntrNode, *virNode, *citNode, *recNode; /* nodes for adding to lists. nodeCntr & nodeVir described below */
     record *rec;
     citizen *cit;
     virus *disease;
+    country *cntr;
     date *dat;
-    while (fgets(buf, 100, input) != NULL)
+    while (fgets(buf, 100, input) != NULL) 
     {
-        argument = sscanf(buf, "%d %s %s %s %d %s %s %s ", &id, first, last, cntr, &age, vir, ans, dt);
-        if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0))
+        argument = sscanf(buf, "%d %s %s %s %d %s %s %s ", &id, first, last, origin, &age, vir, ans, dt);
+        if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0)) /* that means acceptable record */
         {   
-            disease = virusDef(vir);
+            disease = virusDef(vir);    /* passes the temp buffer */
+            cntr = countryDef(origin);  /* passes the temp buffer */
             if(argument == 8)
                 dat = dateDef(dt);
             else   
                 dat = NULL;
-            cit = citizenDef(id, first, last, cntr, age);
-            rec = recordDef(cit, disease, ans, dat);
-            lnode = nodeInit(cit);
-            listAdd(lnode, cits);
-            /*
-               1)find if virus already in list, else add it
-               --------
-               2)find if there is a duplicate in records. If there is, check
-                 if the second rec can be added. If no duplicate found, 
-                 add to records' and citizens' lists. 
-            */
-        //    recordDel(rec);
+
+            virNode = virusInList(disease->value, virList); /* return the node if found */
+            if(  virNode == NULL )              /* if virus not found, then you can add to list */
+            {
+                temp = nodeInit(disease);
+                virNode = listAdd(temp, virList); 
+            }  
+
+            cntrNode = countryInList(cntr->value, cntrList);  /* return the node if found */
+            if( cntrNode == NULL )                            /*if country not found, then you can add to list */
+            {
+                temp = nodeInit(cntr);
+                cntrNode = listAdd(temp, cntrList); 
+            }
+
+            cit = citizenDef(id, first, last, cntrNode, age); /* passes all temp buffers & listnode pointers */
+            if( recInList(cit->id, recList) == NULL )       /* if rec not found, then citizen doesn't exist already.
+                                                                So, add both cit and rec to their lists. */
+            {
+                temp = nodeInit(cit);
+                citNode = listAdd(temp, citList);
+
+                rec= recordDef(citNode, virNode, ans, dat);
+                temp = nodeInit(rec);
+                recNode = listAdd(temp, recList);
+            }
+            else{}                                          /* if the recID exists, don't add to cit list BUT check if rec is valid. */
         }
         
     }
-    listCitPrint(cits);
+    //listPrint(virList, 0); Print List works fine -- 0 for virus
+    //listPrint(cntrList, 1); 1 for country
+    //listPrint(citList, 2); 2 for citizens
+    //listPrint(recList, 3); 3 for records
+
+    //listDel(recList, 3); haven't implemented anything on list Deletion
+    //listDel(citList, 2);
+    //listDel(cntrList, 1);
+    //listDel(virList, 0);
 
     return 0;
 }

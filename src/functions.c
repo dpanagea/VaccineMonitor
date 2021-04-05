@@ -9,44 +9,52 @@ virus* virusDef(const char *vir)
     curr->bloom = NULL;
     curr->skip_no = NULL;
     curr->skip_yes = NULL; 
+
     return curr;
 }
 
 date* dateDef(const char* dt)
 {
-    date* dat = (date*)malloc(sizeof(date));
-    sscanf(dt,"%d-%d-%d", &(dat->day), &(dat->month), &(dat->year));
-    return dat;
+    date* curr = (date*)malloc(sizeof(date));
+    sscanf(dt,"%d-%d-%d", &(curr->day), &(curr->month), &(curr->year));
+
+    return curr;
 }
 
-citizen* citizenDef(int id, const char* first, const char* last, const char* cntr, int age)
+country* countryDef(const char* cntr)
 {
-    citizen* cit = (citizen*)malloc(sizeof(citizen));
-    cit->id = id;
-    cit->age = age;
+    country* curr; 
+    curr = (country*)malloc(sizeof(country));
+    curr->value = (char*)malloc(sizeof(cntr));
+    strcpy(curr->value, cntr);
 
-    cit->firstname = (char*)malloc(sizeof(first));
-    strcpy(cit->firstname, first);
-
-    cit->lastname = (char*)malloc(sizeof(last));
-    strcpy(cit->lastname, last);
-
-    cit->country = (char*)malloc(sizeof(cntr));
-    strcpy(cit->country,cntr);
-
-    return cit; 
+    return curr;
 }
 
-record* recordDef(citizen* cit, virus* vir, const char* ans, date* dat)
+citizen* citizenDef(int id, const char* first, const char* last, struct listnode *cntr, int age)
+{
+    citizen* curr = (citizen*)malloc(sizeof(citizen));
+    curr->id = id;
+    curr->age = age;
+
+    curr->firstname = (char*)malloc(sizeof(first));
+    strcpy(curr->firstname, first);
+
+    curr->lastname = (char*)malloc(sizeof(last));
+    strcpy(curr->lastname, last);
+
+    curr->origin = cntr;
+    
+    return curr; 
+}
+
+record* recordDef(struct listnode* cit, struct listnode* vir, const char* ans, date* dat)
 {
     record* rec = (record*)malloc(sizeof(record));
 
-    rec->person = (citizen*)malloc(sizeof(citizen));
     rec->person = cit;
-
-    rec->disease = (virus*)malloc(sizeof(virus));
     rec->disease = vir;
-
+    
     rec->vacc = (char*)malloc(sizeof(ans));
     strcpy(rec->vacc,ans);
 
@@ -60,9 +68,4 @@ record* recordDef(citizen* cit, virus* vir, const char* ans, date* dat)
         
     return rec;
 }
-/*
-void recordDel(record* rec)
-{
 
-}
-*/

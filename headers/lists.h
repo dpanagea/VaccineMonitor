@@ -19,15 +19,20 @@ typedef struct list
 
 listnode* nodeInit(void*);
 list* listInit();
-void listAdd(listnode*, list*);
-void listCitPrint(list*);
+listnode* listAdd(listnode*, list*);
+void listPrint(list*, int); /* depending on int, we have to print a diff type of list. 
+                        0 -> virus list
+                        1 -> country list
+                        2 -> citizen list
+                        3 -> record list
+                        */
+void listDel(list*, int); /* Same as listPrint */
 
-void listDel(list*);
 
-
-int virusInList(char*, list*);                   /* check if virus already in list */
-struct record* recInList(int, list*, listnode*); /* check if record with citizen ID exists in list,
-                                                    starting from a certain node. Return the first found.
+struct listnode* virusInList(char*, list*);                   /* check if virus already in list */
+struct listnode* countryInList(char*, list*);                  /* check if country already in list */ 
+struct record* recInList(int, list*);             /* check if record with citizen ID exists in list. 
+                                                    Return the first found.
                                                     No need to check in citizens' list, if there is a rec with
                                                     same ID, then the citizen is already in the list */
 

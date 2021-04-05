@@ -22,30 +22,37 @@ typedef struct virus
     void* bloom;
 }virus;
 
+typedef struct country
+{
+    char* value;
+}country;
+
 typedef struct citizen
 {
     int id;
     char* firstname;
     char* lastname;
-    char* country;
+    struct listnode* origin;
     int age;
 }citizen;
 
 typedef struct record
 {
-    struct citizen* person;
-    struct virus* disease;
+    struct listnode* person;
+    struct listnode* disease;
     char* vacc;
     struct date* vaccDate;
 }record;
 
 struct virus* virusDef(const char*); 
 struct date* dateDef(const char*); 
-struct citizen* citizenDef(int, const char*, const char*, const char*, int); 
-struct record* recordDef(citizen*, virus*, const char*, date*); 
+struct country* countryDef(const char*);
+struct citizen* citizenDef(int, const char*, const char*, struct listnode*, int); 
+struct record* recordDef(struct listnode*, struct listnode*, const char*, date*); 
 
 void virusDel(virus*);
 void dateDel(date*);
+void countryDel(country*);
 void citizenDel(citizen*);
 void recordDel(record*);
 
