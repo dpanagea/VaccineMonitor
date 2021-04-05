@@ -21,8 +21,15 @@ The executable can be located at hw1 folder, with the name vaccineMonitor
     |--Struct record: Record consists of a citizen (pointer to a list), virus (pointer to a list), a string
     |                 with an answer about whether the citizen is vaccinated or not for the aforementioned virus.
     |                 If yes, a vaccination date is expected to follow.
-    |-- All def functions take as arguments buffers that contain the values we need to save to a struct. 
+    |--All def functions take as arguments buffers that contain the values we need to save to a struct. 
     |                 They return a pointer to that struct.
-    |--All del functions handle the free() for the corresponding data structs.
+    |--All del functions handle the free() for the corresponding data structs. 
 
--
+
+-lists.c/.h: Contains structs (at .h) and functions about lists.
+    |--Struct listnode
+    |--Struct list
+    |--nodeInit
+    |--listAdd
+    |--ListPrint function, takes the desired list and the type of the list. Prints the data. 
+    |--*****InList finds desired value in list, returns the node found. 

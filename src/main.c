@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
     //listPrint(virList, 0); 
     //listPrint(cntrList, 1);
     //listPrint(citList, 2); 
-    listPrint(recList, 3); 
+    //listPrint(recList, 3); 
 
     listDel(recList, 3); 
     listDel(citList, 2);
