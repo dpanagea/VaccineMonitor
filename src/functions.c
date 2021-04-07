@@ -69,6 +69,19 @@ record* recordDef(struct listnode* cit, struct listnode* vir, const char* ans, d
     return rec;
 }
 
+int cmpDups(struct listnode* recNode, citizen* cit2, struct listnode* virNode)
+{
+    record* rec = recNode->value;
+    citizen* cit1 = rec->person->value;
+    if (cit1->id != cit2->id){return 0;}
+    else if(strcmp(cit1->firstname, cit2->firstname) != 0){return 0;}
+    else if(strcmp(cit1->lastname, cit2->lastname) != 0){return 0;}
+    else if(strcmp(cit1->origin->value, cit2->origin->value) != 0){return 0;}
+    else if(cit1->age != cit2->age){return 0;}
+    else if(strcmp(rec->disease->value, virNode->value) == 0){return 0;} /* the last rec has the same virus as the 1st */
+    return 1;
+}
+
 void virusDel(virus* temp)
 {
     free(temp->value);

@@ -70,15 +70,21 @@ int main(int argc, char* argv[])
             {
                 temp = nodeInit(cit);
                 citNode = listAdd(temp, citList);
-
                 rec= recordDef(citNode, virNode, ans, dat);
                 temp = nodeInit(rec);
                 recNode = listAdd(temp, recList);
             }
-            else
+            else                                                    /* if the recID exists, don't add to cit list BUT check if rec is valid. */
             {
-
-            }                                          /* if the recID exists, don't add to cit list BUT check if rec is valid. */
+                if(cmpDups(recNode, cit, virNode) == 1)   /* if =1, then no conflict */
+                {
+                    rec = recNode->value;
+                    citNode = rec->person;      /* find citizen pointer from 1st record */
+                    rec = recordDef(citNode, virNode, ans, dat);    /* define the record we want to add to list */
+                    temp = nodeInit(rec);
+                    recNode = listAdd(temp, recList);
+                } 
+            }                                          
         }
         
     }

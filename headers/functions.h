@@ -6,6 +6,7 @@
 #include <string.h>
 #include "hashtable.h"
 #include "lists.h"
+#include "bloom.h"
 
 typedef struct date
 {
@@ -49,6 +50,8 @@ struct date* dateDef(const char*);
 struct country* countryDef(const char*);
 struct citizen* citizenDef(int, const char*, const char*, struct listnode*, int); 
 struct record* recordDef(struct listnode*, struct listnode*, const char*, date*); 
+
+int cmpDups(struct listnode*, struct citizen*, struct listnode*);
 
 void virusDel(virus*);
 void countryDel(country*);
