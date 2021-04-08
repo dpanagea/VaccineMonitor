@@ -52,6 +52,7 @@ int main(int argc, char* argv[])
             virNode = virusInList(disease->value, virList); /* return the node if found */
             if(  virNode == NULL )              /* if virus not found, then you can add to list */
             {
+                disease->bf = bloomInit(bloomSize);
                 temp = nodeInit(disease);
                 virNode = listAdd(temp, virList); 
             }  

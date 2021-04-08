@@ -6,7 +6,7 @@ virus* virusDef(const char *vir)
     curr->value = (char*)malloc(sizeof(vir));
     if(curr->value == NULL){printf("Error \n");}
     strcpy(curr->value, vir);
-    curr->bloom = NULL;
+    curr->bf = NULL;
     curr->skip_no = NULL;
     curr->skip_yes = NULL; 
 

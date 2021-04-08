@@ -1,6 +1,7 @@
 #ifndef _FUNCTIONS_
 #define _FUNCTIONS_
 
+#define MAXK 16
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,7 +21,7 @@ typedef struct virus
     char* value;
     void* skip_yes;
     void* skip_no;
-    void* bloom;
+    bloom* bf;
 }virus;
 
 typedef struct country
