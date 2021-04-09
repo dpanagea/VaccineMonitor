@@ -50,7 +50,7 @@ void listPrint(list* List, int type)
         {
             curr = temp->value;
             cntr = curr->origin->value;
-            printf("%d %s %s %s %d \n", curr->id, curr->firstname, curr->lastname, cntr->value, curr->age);
+            printf("%s %s %s %s %d \n", curr->id, curr->firstname, curr->lastname, cntr->value, curr->age);
             temp = temp->next;
         }
     }
@@ -66,7 +66,7 @@ void listPrint(list* List, int type)
             cit = curr->person->value;
             vir = curr->disease->value;
             cntr = cit->origin->value;
-            printf( "%d %s %s %s %d %s %s ", cit->id, cit->firstname, cit->lastname, cntr->value, cit->age, vir->value, curr->vacc);
+            printf( "%s %s %s %s %d %s %s ", cit->id, cit->firstname, cit->lastname, cntr->value, cit->age, vir->value, curr->vacc);
             if( curr->vaccDate != NULL)
             {
                 printf("%d-%d-%d", curr->vaccDate->day, curr->vaccDate->month, curr->vaccDate->year);
@@ -148,7 +148,7 @@ struct listnode* countryInList(char *value, list *cntrList)
     return NULL;
 }
 
-struct listnode* recInList(int id, list *recList)
+struct listnode* recInList(char* id, list *recList)
 {
     record *left, *right;
     citizen *temp;
@@ -160,11 +160,11 @@ struct listnode* recInList(int id, list *recList)
     {
         left = front->value;
         temp = left->person->value;
-        if(temp->id == id)
+        if(strcmp(temp->id, id) == 0)
             return front;
         right = rear->value;
         temp = right->person->value;
-        if( temp->id == id)
+        if( strcmp(temp->id, id) == 0)
             return rear;
         if(itemsLeft == 1)  /* only one item in list */
             return NULL;

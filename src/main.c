@@ -1,4 +1,6 @@
 #include "../headers/functions.h"
+#include "../headers/lists.h"
+#include "../headers/bloom.h"
 
 int main(int argc, char* argv[])
 {
@@ -23,8 +25,8 @@ int main(int argc, char* argv[])
     /* variables needed for arguments  */
     char buf[100]; /* line buffer */ 
     int argument;  /* num of args. to check if date is given */
-    int id, age;    
-    char first[13], last[13], origin[20], ans[4], dt[11], vir[20]; /* temp buffers */
+    int age;  
+    char id[5], first[13], last[13], origin[20], ans[4], dt[11], vir[20]; /* temp buffers */
 
     list *virList, *recList, *citList, *cntrList; /* lists */
     virList = listInit();   /* initialize */
@@ -39,7 +41,7 @@ int main(int argc, char* argv[])
     date *dat;
     while (fgets(buf, 100, input) != NULL) 
     {
-        argument = sscanf(buf, "%d %s %s %s %d %s %s %s ", &id, first, last, origin, &age, vir, ans, dt);
+        argument = sscanf(buf, "%s %s %s %s %d %s %s %s ", id, first, last, origin, &age, vir, ans, dt);
         if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0)) /* that means acceptable record */
         {   
             disease = virusDef(vir);    /* passes the temp buffer */
@@ -50,13 +52,15 @@ int main(int argc, char* argv[])
                 dat = NULL;
 
             virNode = virusInList(disease->value, virList); /* return the node if found */
+            
             if(  virNode == NULL )              /* if virus not found, then you can add to list */
             {
-                disease->bf = bloomInit(bloomSize);
                 temp = nodeInit(disease);
                 virNode = listAdd(temp, virList); 
+                disease = virNode->value;
+                disease->bf = bloomInit(bloomSize);
             }  
-
+            disease = virNode->value;
             cntrNode = countryInList(cntr->value, cntrList);  /* return the node if found */
             if( cntrNode == NULL )                            /*if country not found, then you can add to list */
             {
@@ -66,14 +70,14 @@ int main(int argc, char* argv[])
 
             cit = citizenDef(id, first, last, cntrNode, age); /* passes all temp buffers & listnode pointers */
             recNode = recInList(cit->id, recList);
-            if( recNode == NULL )       /* if rec not found, then citizen doesn't exist already.
-                                                                So, add both cit and rec to their lists. */
+            if( recNode == NULL )       /* if rec not found, then citizen doesn't exist already. So, add both cit and rec to their lists. */
             {
                 temp = nodeInit(cit);
                 citNode = listAdd(temp, citList);
                 rec= recordDef(citNode, virNode, ans, dat);
                 temp = nodeInit(rec);
                 recNode = listAdd(temp, recList);
+                bloomAdd(disease->bf, cit->id);
             }
             else                                                    /* if the recID exists, don't add to cit list BUT check if rec is valid. */
             {
@@ -84,11 +88,16 @@ int main(int argc, char* argv[])
                     rec = recordDef(citNode, virNode, ans, dat);    /* define the record we want to add to list */
                     temp = nodeInit(rec);
                     recNode = listAdd(temp, recList);
+                    bloomAdd(disease->bf, cit->id);
                 } 
             }                                          
         }
         
     }
+/* ---------- END OF PROCESSING INPUT FILE --------------- */
+
+    char* dd= "332";
+    printf("%s: %d \n", disease->value, bloomFind(disease->bf, dd));
     // Print List works fine 
     //listPrint(virList, 0); 
     //listPrint(cntrList, 1);

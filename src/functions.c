@@ -31,11 +31,13 @@ country* countryDef(const char* cntr)
     return curr;
 }
 
-citizen* citizenDef(int id, const char* first, const char* last, struct listnode *cntr, int age)
+citizen* citizenDef(const char* id, const char* first, const char* last, struct listnode *cntr, int age)
 {
     citizen* curr = (citizen*)malloc(sizeof(citizen));
-    curr->id = id;
     curr->age = age;
+
+    curr->id = (char*)malloc(sizeof(id));
+    strcpy(curr->id, id);
 
     curr->firstname = (char*)malloc(sizeof(first));
     strcpy(curr->firstname, first);
@@ -73,7 +75,7 @@ int cmpDups(struct listnode* recNode, citizen* cit2, struct listnode* virNode)
 {
     record* rec = recNode->value;
     citizen* cit1 = rec->person->value;
-    if (cit1->id != cit2->id){return 0;}
+    if (strcmp(cit1->id, cit2->id) != 0){return 0;}
     else if(strcmp(cit1->firstname, cit2->firstname) != 0){return 0;}
     else if(strcmp(cit1->lastname, cit2->lastname) != 0){return 0;}
     else if(strcmp(cit1->origin->value, cit2->origin->value) != 0){return 0;}
@@ -96,6 +98,7 @@ void countryDel(country* temp)
 
 void citizenDel(citizen* temp)
 {
+    free(temp->id);
     free(temp->firstname);
     free(temp->lastname);
     free(temp);

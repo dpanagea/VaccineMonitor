@@ -31,7 +31,7 @@ void listDel(list*, int); /* Same as listPrint */
 
 struct listnode* virusInList(char*, list*);                   /* check if virus already in list */
 struct listnode* countryInList(char*, list*);                  /* check if country already in list */ 
-struct listnode* recInList(int, list*);             /* check if record with citizen ID exists in list. 
+struct listnode* recInList(char*, list*);             /* check if record with citizen ID exists in list. 
                                                     Return the first found.
                                                     No need to check in citizens' list, if there is a rec with
                                                     same ID, then the citizen is already in the list */

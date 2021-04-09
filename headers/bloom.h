@@ -2,6 +2,7 @@
 #define _BLOOM_
 
 #include "functions.h"
+#include "lists.h"
 
 typedef struct bloom
 {
@@ -15,8 +16,8 @@ unsigned long hash_i(unsigned char*, unsigned int);
 
 bloom* bloomInit(unsigned long);
 void bloomDel(bloom*);
-void bloomAdd(bloom*, record*);
-int bloomFind(bloom*, record*);
+void bloomAdd(bloom*, char*);
+int bloomFind(bloom*, char*);
 
 
 #endif 
