@@ -1,4 +1,5 @@
 #include "../headers/bloom.h"
+#include <stdint.h>
 
 unsigned long djb2(unsigned char* str)
 {

@@ -2,7 +2,6 @@
 #define BLOOM_H
 
 #include "functions.h"
-#include "lists.h"
 
 typedef struct bloom
 {

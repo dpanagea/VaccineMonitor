@@ -6,9 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "lists.h"
-
-
-
+#include "skip.h"
+#include "bloom.h"
 
 typedef struct date
 {
@@ -49,7 +48,7 @@ typedef struct record
 
 
 
-struct virus* virusDef(const char*, unsigned long); 
+struct virus* virusDef(const char*); 
 struct date* dateDef(const char*); 
 struct country* countryDef(const char*);
 struct citizen* citizenDef(const char*, const char*, const char*, struct listnode*, int); 

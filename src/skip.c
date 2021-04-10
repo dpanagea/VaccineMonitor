@@ -1,5 +1,4 @@
 #include "../headers/skip.h"
-#include "../headers/functions.h"
 #include <time.h>
 
 int randLvl() /* random num between [1,MAXSKIP-1] for levels of each num */
@@ -29,10 +28,11 @@ snode* snodeInit(void* value)
     return new;
 }
 
-void skipAdd(skip* slist, citizen* cit)
+void skipAdd(skip* slist, void* value)
 {
     snode *curr, *up, *new;
-    citizen *temp;
+    citizen *temp, *cit;
+    cit = (struct citizen*)value;
     up = NULL;
     int i, lvl;
     lvl = randLvl();
@@ -55,10 +55,37 @@ void skipAdd(skip* slist, citizen* cit)
     }
 }
 
-snode* skipFind(skip* slist, citizen* cit)
+void snodeDel(skip* slist, void* value)
+{
+    snode *curr, *del;
+    citizen *temp, *cit;
+    cit = (struct citizen*)value;
+    int i;
+    for(i = MAXSKIP-1; i>=0; i--)
+    {
+        curr = slist->levels[i];
+        while(curr->next != NULL)
+        {
+            temp = curr->next->value;
+            if(atoi(temp->id) > atoi(cit->id))
+                break;
+            curr = curr->next;
+        }
+        if(curr != NULL)
+        {
+            del = curr->next;
+            curr->next = del->next;
+            free(del);
+        }
+    }
+
+}
+
+snode* skipFind(skip* slist, void* value)
 {
     snode *curr; 
-    citizen *temp;
+    citizen *temp, *cit;
+    cit = (struct citizen*)value;
     int i, flag = 0;
     for(i = MAXSKIP-1; i>=0; i--)
     {
@@ -78,10 +105,6 @@ snode* skipFind(skip* slist, citizen* cit)
     }
     return curr->next;
 }
-/*
-void snodeDel(skip* slist, citizen* cit)
-{}
-*/
 
 void skipDel(skip* slist)
 {

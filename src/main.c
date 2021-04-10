@@ -1,6 +1,5 @@
+#include <stdio.h>
 #include "../headers/functions.h"
-#include "../headers/lists.h"
-#include "../headers/bloom.h"
 
 int main(int argc, char* argv[])
 {
@@ -44,7 +43,8 @@ int main(int argc, char* argv[])
         argument = sscanf(buf, "%s %s %s %s %d %s %s %s ", id, first, last, origin, &age, vir, ans, dt);
         if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0)) /* that means acceptable record */
         {   
-            disease = virusDef(vir, bloomSize);    /* passes the temp buffer */
+            disease = virusDef(vir);    /* passes the temp buffer */
+
             cntr = countryDef(origin);  /* passes the temp buffer */
             if(argument == 8)
                 dat = dateDef(dt);
@@ -59,6 +59,8 @@ int main(int argc, char* argv[])
                 virNode = listAdd(temp, virList); 
                 disease = virNode->value;
                 disease->bf = bloomInit(bloomSize);
+                disease->skip_no = skipInit();
+                disease->skip_yes = skipInit();
             }  
             disease = virNode->value;
             cntrNode = countryInList(cntr->value, cntrList);  /* return the node if found */
@@ -77,7 +79,8 @@ int main(int argc, char* argv[])
                 rec= recordDef(citNode, virNode, ans, dat);
                 temp = nodeInit(rec);
                 recNode = listAdd(temp, recList);
-                bloomAdd(disease->bf, cit->id);
+                if(strcmp(ans, "YES") == 0)
+                    bloomAdd(disease->bf, cit->id);
             }
             else                                                    /* if the recID exists, don't add to cit list BUT check if rec is valid. */
             {
@@ -88,16 +91,62 @@ int main(int argc, char* argv[])
                     rec = recordDef(citNode, virNode, ans, dat);    /* define the record we want to add to list */
                     temp = nodeInit(rec);
                     recNode = listAdd(temp, recList);
-                    bloomAdd(disease->bf, cit->id);
+                    if(strcmp(ans, "YES") == 0)
+                        bloomAdd(disease->bf, cit->id);
                 } 
+                else
+                {
+                    printf("ERROR IN RECORD %s", buf);
+                }
             }                                          
         }
-        
+        else
+        {
+            printf("ERROR IN RECORD %s\n", buf);
+        }
     }
 /* ---------- END OF PROCESSING INPUT FILE --------------- */
+    
+    printf("Processing input file has ended.\n");
+    while(1)
+    {
+        printf("Please insert the desired command\n");
+        scanf("%s", buf);
+        if(strcmp(buf, "/vaccineStatusBloom") == 0)
+        {
+            printf("Success \n");
+        }
+        else if(strcmp(buf, "/vaccineStatus") == 0)
+        {
 
-    char* dd= "332";
-    printf("%s: %d \n", disease->value, bloomFind(disease->bf, dd));
+        }
+        else if(strcmp(buf, "/populationStatus") == 0)
+        {
+
+        }
+        else if(strcmp(buf, "/popStatusByAge") == 0)
+        {
+
+        }
+        else if(strcmp(buf, "/insertCitizenRecord") == 0)
+        {
+
+        }
+        else if(strcmp(buf, "/vaccinateNow") == 0)
+        {
+
+        }
+        else if(strcmp(buf, "/list-nonVaccinated-Persons") == 0)
+        {
+
+        }
+        else if(strcmp(buf, "/exit") == 0)
+        {
+            printf("Exiting. We hope to see you again!\n");
+            break;
+        }
+
+    }
     // Print List works fine 
     //listPrint(virList, 0); 
     //listPrint(cntrList, 1);

@@ -23,10 +23,10 @@ typedef struct skiplist
 int randLvl();
 skip* skipInit();
 snode* snodeInit(void*);
-void skipAdd(skip*, citizen*);
-snode* skipFind(skip*, citizen*);
+void skipAdd(skip*, void*);
+snode* skipFind(skip*, void*);
 void skipDel(skip*);
-void snodeDel(skip*, citizen*); /* del snode with certain ID */
+void snodeDel(skip*, void*); /* del snode with certain ID */
 
 #endif
 
