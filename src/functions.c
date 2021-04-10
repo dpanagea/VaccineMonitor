@@ -1,14 +1,18 @@
 #include "../headers/functions.h"
+#include "../headers/skip.h"
+#include "../headers/bloom.h"
 
-virus* virusDef(const char *vir)
+
+
+virus* virusDef(const char *vir, unsigned long bsize)
 {
     virus *curr = (virus*)malloc(sizeof(virus));
     curr->value = (char*)malloc(sizeof(vir));
     if(curr->value == NULL){printf("Error \n");}
     strcpy(curr->value, vir);
-    curr->bf = NULL;
-    curr->skip_no = NULL;
-    curr->skip_yes = NULL; 
+    curr->bf = bloomInit(bsize);
+    curr->skip_no = skipInit();
+    curr->skip_yes = skipInit(); 
 
     return curr;
 }

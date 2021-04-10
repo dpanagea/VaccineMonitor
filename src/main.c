@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
         printf ("Error: Wrong number of arguments \n Try .vaccineMonitor -c citizenRecordsFile -b bloomSize \n");
         return -1;
     }
-    int bloomSize;
+    unsigned long bloomSize;
     FILE *input;
     if (strcmp (argv[1], "-c") == 0 )
     {
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
         argument = sscanf(buf, "%s %s %s %s %d %s %s %s ", id, first, last, origin, &age, vir, ans, dt);
         if((argument == 8 && strcmp(ans, "YES") == 0) || (argument == 7 && strcmp(ans, "NO") == 0)) /* that means acceptable record */
         {   
-            disease = virusDef(vir);    /* passes the temp buffer */
+            disease = virusDef(vir, bloomSize);    /* passes the temp buffer */
             cntr = countryDef(origin);  /* passes the temp buffer */
             if(argument == 8)
                 dat = dateDef(dt);

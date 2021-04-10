@@ -1,5 +1,5 @@
-#ifndef _BLOOM_
-#define _BLOOM_
+#ifndef BLOOM_H
+#define BLOOM_H
 
 #include "functions.h"
 #include "lists.h"

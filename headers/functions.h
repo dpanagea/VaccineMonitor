@@ -1,11 +1,14 @@
-#ifndef _FUNCTIONS_
-#define _FUNCTIONS_
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 
 #define MAXK 16
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "lists.h"
+
+
+
 
 typedef struct date
 {
@@ -17,8 +20,8 @@ typedef struct date
 typedef struct virus
 {
     char* value;
-    void* skip_yes;
-    void* skip_no;
+    struct skiplist* skip_yes;
+    struct skiplist* skip_no;
     struct bloom* bf;
 }virus;
 
@@ -44,7 +47,9 @@ typedef struct record
     struct date* vaccDate;
 }record;
 
-struct virus* virusDef(const char*); 
+
+
+struct virus* virusDef(const char*, unsigned long); 
 struct date* dateDef(const char*); 
 struct country* countryDef(const char*);
 struct citizen* citizenDef(const char*, const char*, const char*, struct listnode*, int); 
