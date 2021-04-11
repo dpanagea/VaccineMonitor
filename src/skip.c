@@ -31,8 +31,9 @@ snode* snodeInit(void* value)
 void skipAdd(skip* slist, void* value)
 {
     snode *curr, *up, *new;
-    citizen *temp, *cit;
-    cit = (struct citizen*)value;
+    record *temp, *rec;
+    citizen *tcit, *rcit;
+    rec = (struct record*)value;
     up = NULL;
     int i, lvl;
     lvl = randLvl();
@@ -42,11 +43,13 @@ void skipAdd(skip* slist, void* value)
         while(curr->next != NULL)
         {
             temp = curr->next->value;
-            if(atoi(temp->id) > atoi(cit->id)) 
+            tcit = temp->person->value;
+            rcit = rec->person->value;
+            if(atoi(tcit->id) > atoi(rcit->id)) 
                 break;
             curr = curr->next;
         }
-        new = snodeInit(cit);
+        new = snodeInit(rec);
         new->next = curr->next;
         curr->next = new;
         if (up != NULL)
@@ -58,15 +61,18 @@ void skipAdd(skip* slist, void* value)
 void snodeDel(skip* slist, void* value)
 {
     snode *curr, *del;
+    record *rtemp, *rcit;
     citizen *temp, *cit;
-    cit = (struct citizen*)value;
+    rcit = (struct record*)value;
+    cit = rcit->person->value;
     int i;
     for(i = MAXSKIP-1; i>=0; i--)
     {
         curr = slist->levels[i];
         while(curr->next != NULL)
         {
-            temp = curr->next->value;
+            rtemp = curr->next->value;
+            temp = rtemp->person->value;
             if(atoi(temp->id) > atoi(cit->id))
                 break;
             curr = curr->next;
@@ -81,29 +87,56 @@ void snodeDel(skip* slist, void* value)
 
 }
 
-snode* skipFind(skip* slist, void* value)
+void skipPrint(skip* slist)
+{
+    snode *curr;
+    record *rcit;
+    citizen *cit;
+    int i;
+    for(i=MAXSKIP-1; i>=0; i--)
+    {
+        curr = slist->levels[i];
+        if(curr->next != NULL)
+        {
+            while(curr->next != NULL)
+            {
+                curr = curr->next;
+                rcit = (record*)curr->value;
+                cit = rcit->person->value;
+                printf("%s->", cit->id);
+            }
+            printf("\n");
+        }
+    }
+}
+
+snode* skipFind(skip* slist, char* value)
 {
     snode *curr; 
-    citizen *temp, *cit;
-    cit = (struct citizen*)value;
+    citizen *temp;
+    record *rtemp;
     int i, flag = 0;
-    for(i = MAXSKIP-1; i>=0; i--)
+    for(i = MAXSKIP-1; i>=0 && !flag; i--)
     {
         curr = slist->levels[i];
         while(!flag && curr->next != NULL)
         {
-            temp = curr->next->value;
-            if(atoi(temp->id) == atoi(cit->id)) /* found */
+            rtemp = curr->next->value;
+            temp = rtemp->person->value;    
+            if(strcmp(temp->id, value) == 0) /* found */
+            {
                 flag = 1;
-            else if(atoi(temp->id) > atoi(cit->id))
+            }
+            else if(atoi(temp->id) > atoi(value) && curr->value != NULL)
                 curr = curr->down;
             else 
                 curr = curr->next;
-            if(curr->value == NULL)  /*that means that curr is at setinel */
+            if(!flag && curr == NULL)  /*that means that curr is at setinel */
                 curr->next = NULL;
         }
     }
-    return curr->next;
+    if(flag == 0){return NULL;}
+    else {return curr->next;}
 }
 
 void skipDel(skip* slist)
@@ -123,3 +156,5 @@ void skipDel(skip* slist)
     }
     free(slist);
 }
+
+

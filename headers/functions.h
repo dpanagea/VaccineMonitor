@@ -9,6 +9,8 @@
 #include "skip.h"
 #include "bloom.h"
 
+typedef struct list list;
+
 typedef struct date
 {
     int day;
@@ -60,5 +62,10 @@ void virusDel(virus*);
 void countryDel(country*);
 void citizenDel(citizen*);
 void recordDel(record*);
+
+/* Commands asked from assignment */
+void vaccineStatusBloom(list*, char*, char*);
+void vaccineStatus(char*, list*);
+void insertCitizenRecord(char*, list*, list*, list*, list*, int);
 
 #endif

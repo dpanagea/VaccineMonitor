@@ -74,7 +74,7 @@ int bloomFind(bloom* bf, char* recID)
         pos = hash_i((unsigned char*)recID, i) % (bf->size*8);
         if (!(arr[pos/8] & 1 << pos % 8))
         {
-            flag = 0;
+            flag = 0;       /* not vaccinated */
             
         }
     }

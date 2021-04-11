@@ -24,9 +24,11 @@ int randLvl();
 skip* skipInit();
 snode* snodeInit(void*);
 void skipAdd(skip*, void*);
-snode* skipFind(skip*, void*);
+snode* skipFind(skip*, char*);
 void skipDel(skip*);
 void snodeDel(skip*, void*); /* del snode with certain ID */
+void skipPrint(skip*);
+
 
 #endif
 

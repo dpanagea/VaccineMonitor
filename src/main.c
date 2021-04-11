@@ -80,7 +80,12 @@ int main(int argc, char* argv[])
                 temp = nodeInit(rec);
                 recNode = listAdd(temp, recList);
                 if(strcmp(ans, "YES") == 0)
+                {
                     bloomAdd(disease->bf, cit->id);
+                    skipAdd(disease->skip_yes, rec);
+                }
+                else
+                    skipAdd(disease->skip_no, rec);
             }
             else                                                    /* if the recID exists, don't add to cit list BUT check if rec is valid. */
             {
@@ -92,7 +97,12 @@ int main(int argc, char* argv[])
                     temp = nodeInit(rec);
                     recNode = listAdd(temp, recList);
                     if(strcmp(ans, "YES") == 0)
+                    {
                         bloomAdd(disease->bf, cit->id);
+                        skipAdd(disease->skip_yes, rec);
+                    }
+                    else
+                        skipAdd(disease->skip_no, rec);
                 } 
                 else
                 {
@@ -102,7 +112,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-            printf("ERROR IN RECORD %s\n", buf);
+           printf("ERROR IN RECORD %s\n", buf);
         }
     }
 /* ---------- END OF PROCESSING INPUT FILE --------------- */
@@ -114,11 +124,14 @@ int main(int argc, char* argv[])
         scanf("%s", buf);
         if(strcmp(buf, "/vaccineStatusBloom") == 0)
         {
-            printf("Success \n");
+            scanf("%s %s", id, vir);
+            vaccineStatusBloom(virList, id, vir);
         }
         else if(strcmp(buf, "/vaccineStatus") == 0)
         {
-
+            if( fgets(buf,100,stdin) != NULL)
+                vaccineStatus(buf, virList);
+            
         }
         else if(strcmp(buf, "/populationStatus") == 0)
         {
@@ -130,7 +143,8 @@ int main(int argc, char* argv[])
         }
         else if(strcmp(buf, "/insertCitizenRecord") == 0)
         {
-
+            if( fgets(buf, 100, stdin) != NULL)
+                insertCitizenRecord(buf, virList, citList, recList, cntrList, bloomSize);
         }
         else if(strcmp(buf, "/vaccinateNow") == 0)
         {
@@ -144,6 +158,10 @@ int main(int argc, char* argv[])
         {
             printf("Exiting. We hope to see you again!\n");
             break;
+        }
+        else
+        {
+            printf("Wrong sequence of commands. Please try again.\n");
         }
 
     }
