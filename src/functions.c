@@ -147,17 +147,19 @@ void vaccineStatus(char* buf, struct list* virList)
         listnode *temp = virList->head;
         while (temp != NULL && temp->value != NULL)
         {
-            curr = temp->value;
-            snode *yes = skipFind(curr->skip_yes, id);
-            snode *no = skipFind(curr->skip_no, id);
-            if(yes == NULL && no != NULL)
+            curr = (virus*)temp->value;
+            snode *yes = NULL, *no= NULL;
+            yes = skipFind(curr->skip_yes, id);
+            if(yes == NULL)
             {
-                    printf("%s NO\n", curr->value);
+                no = skipFind(curr->skip_no, id);
+                if (no != NULL)
+                    printf("%s NO\n", curr->value);    
             }
-            else if(yes != NULL && no == NULL)
+            else
             {
-                record *rec = yes->value;
-            //    printf("%s YES %d-%d-%d\n", curr->value, rec->vaccDate->day, rec->vaccDate->month, rec->vaccDate->year);
+                record *rec = (record*)yes->value;
+                printf("%s %s %d-%d-%d\n", curr->value, rec->vacc, rec->vaccDate->day, rec->vaccDate->month, rec->vaccDate->year);
             }
             temp = temp->next;
         }
@@ -171,12 +173,12 @@ void vaccineStatus(char* buf, struct list* virList)
         }
         else
         {
-            virus* disease = lnode->value;
-            snode *yes, *no;
+            virus* disease = (virus*) lnode->value;
+            snode *yes = NULL , *no = NULL;
             yes = skipFind(disease->skip_yes, id);
+            no = skipFind(disease->skip_no, id);
             if(yes == NULL)
             {
-                no = skipFind(disease->skip_no, id);
                 if(no == NULL)
                     printf("Not enough data about citizen %s and virus '%s'.\n", id, vir);
                 else
@@ -184,7 +186,7 @@ void vaccineStatus(char* buf, struct list* virList)
             }
             else
             {
-                record *rec = yes->value;
+                record *rec = (record*)yes->value;
                 printf("VACCINATED ON %d-%d-%d \n", rec->vaccDate->day, rec->vaccDate->month, rec->vaccDate->year);
             }
         }
@@ -283,3 +285,83 @@ void insertCitizenRecord(char* buf, list* virList, list* citList, list* recList,
     }
 }
 
+void vaccinateNow(char* buf, list* virList, date* dt)
+{
+    int age; 
+    char id[5], first[13], last[13], origin[20], ans[4], vir[20];
+    sscanf(buf,"%s %s %s %s %d %s", id, first, last, origin, &age, vir);
+    listnode *virNode = NULL;
+    virus *disease = virusDef(vir);
+    record *rec; 
+    snode *yes = NULL, *no = NULL;
+    char yn[4];
+    int add = 0; /* no need to add new record */
+    virNode = virusInList(disease->value, virList);
+    if(virNode == NULL)
+    {
+        printf("Virus %s not in our records. Want to add now and insert the new record? (yes/no)\n", vir);
+        scanf("%s", yn);
+        if(strcmp(yn, "yes") == 0)
+            add = 1;
+    }
+    else
+    {
+        disease = (virus*)virNode->value;
+        yes = skipFind(disease->skip_yes, id);
+        
+        if(yes != NULL)
+        {
+            no = skipFind(disease->skip_no, id);
+            printf("There is no record regarding citizen %s and virus %s. Want to add now? (yes/no)\n", id, vir);
+            scanf("%s", yn);
+            if(strcmp(yn, "yes") == 0)
+                add = 1;
+            if(no != NULL)
+            {
+                rec = (record*)no->value;
+                snodeDel(disease->skip_no, no);
+                rec->vacc = (char*)realloc(rec->vacc, sizeof(ans));
+                strcpy(rec->vacc, ans);
+                rec->vaccDate->day = dt->day;
+                rec->vaccDate->month = dt->month;
+                rec->vaccDate->year = dt->year;
+                skipAdd(disease->skip_yes, rec);
+            }
+
+            rec = (record*)yes->value;
+            
+        
+
+            printf("ERROR: CITIZEN %s ALREADY VACCINATED ON %d-%d-%d\n", id, rec->vaccDate->day, rec->vaccDate->month, rec->vaccDate->year);
+        }
+    }
+}
+
+void listNonVacc(char* buf, list* virList)
+{
+    char vir[20];
+    int args = sscanf(buf, "%s", vir);
+    if(args == 1)
+    {
+        listnode *lnode = virusInList(vir,virList);
+        if(lnode != NULL)
+        {
+            virus *disease = (virus*) lnode->value;
+            skip *slist = disease->skip_no;
+            snode *curr;
+            record *rec;
+            citizen *cit;
+            country *cntr;
+            curr = slist->levels[0];
+            curr = curr->next;
+            while(curr != NULL)
+            {
+                rec = (record*)curr->value;
+                cit = (citizen*)rec->person->value;
+                cntr = (country*)cit->origin->value;
+                printf("%s %s %s %s %d \n", cit->id, cit->firstname, cit->lastname, cntr->value, cit->age);
+                curr = curr->next;
+            }
+        }
+    }
+}

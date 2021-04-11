@@ -67,5 +67,7 @@ void recordDel(record*);
 void vaccineStatusBloom(list*, char*, char*);
 void vaccineStatus(char*, list*);
 void insertCitizenRecord(char*, list*, list*, list*, list*, int);
+void vaccinateNow(char*, list*, date*);
+void listNonVacc(char*, list*);
 
 #endif

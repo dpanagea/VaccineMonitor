@@ -109,8 +109,8 @@ struct listnode* virusInList(char *value, list *virList)
     rear = virList->tail;
     while(itemsLeft > 0)
     {
-        left = front->value;
-        right = rear->value;
+        left = (virus*)front->value;
+        right = (virus*)rear->value;
         if( strcmp(left->value, value) == 0 )
             return front;
         if ( strcmp(right->value, value) == 0 )

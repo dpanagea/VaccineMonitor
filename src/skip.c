@@ -1,4 +1,6 @@
 #include "../headers/skip.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 int randLvl() /* random num between [1,MAXSKIP-1] for levels of each num */
@@ -60,10 +62,12 @@ void skipAdd(skip* slist, void* value)
 
 void snodeDel(skip* slist, void* value)
 {
-    snode *curr, *del;
+    snode *curr, *del, *scit;
     record *rtemp, *rcit;
     citizen *temp, *cit;
-    rcit = (struct record*)value;
+
+    scit = value;
+    rcit = (struct record*)scit->value;
     cit = rcit->person->value;
     int i;
     for(i = MAXSKIP-1; i>=0; i--)
@@ -112,31 +116,59 @@ void skipPrint(skip* slist)
 
 snode* skipFind(skip* slist, char* value)
 {
-    snode *curr; 
-    citizen *temp;
-    record *rtemp;
-    int i, flag = 0;
-    for(i = MAXSKIP-1; i>=0 && !flag; i--)
+    int flag = 0;
+    if(slist != NULL)
     {
-        curr = slist->levels[i];
-        while(!flag && curr->next != NULL)
+        
+        snode *curr; 
+        citizen *temp;
+        record *rtemp;
+    //    int i = 0;
+        int currid, findid;
+        findid = atoi(value);
+        curr = slist->levels[0];
+        curr = curr->next;
+        while(!flag && curr!= NULL)
         {
-            rtemp = curr->next->value;
-            temp = rtemp->person->value;    
-            if(strcmp(temp->id, value) == 0) /* found */
-            {
+            rtemp = (record*)curr->value;
+            temp = (citizen*)rtemp->person->value;
+            currid = atoi(temp->id);
+            if(findid == currid)
                 flag = 1;
-            }
-            else if(atoi(temp->id) > atoi(value) && curr->value != NULL)
-                curr = curr->down;
             else 
-                curr = curr->next;
-            if(!flag && curr == NULL)  /*that means that curr is at setinel */
-                curr->next = NULL;
+                curr = curr->next; 
         }
+        /*
+        for(i = MAXSKIP-1; i>=0 && !flag; i--)
+        {
+            curr = slist->levels[0];
+            while(!flag && curr->next != NULL)
+            {
+                rtemp = (record*)curr->next->value;
+                temp = (citizen*)rtemp->person->value;
+                currid = atoi(temp->id);    
+                if(currid == findid) 
+                {
+                    flag = 1;
+                }
+                else if(currid > findid && curr->value != NULL)
+                    curr = curr->down;
+                else 
+                    curr = curr->next;
+                if(!flag && curr == NULL)  // that means that curr is at setinel 
+                    curr->next = NULL;
+            }
+               
+        }*/
+
+        if(flag == 0){return NULL;}
+        else {return curr;}
     }
-    if(flag == 0){return NULL;}
-    else {return curr->next;}
+    else
+    {
+        printf("Error. NULL skip list.\n");
+        return NULL;
+    }
 }
 
 void skipDel(skip* slist)

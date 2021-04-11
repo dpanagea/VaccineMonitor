@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include "../headers/functions.h"
 
 int main(int argc, char* argv[])
@@ -131,7 +132,6 @@ int main(int argc, char* argv[])
         {
             if( fgets(buf,100,stdin) != NULL)
                 vaccineStatus(buf, virList);
-            
         }
         else if(strcmp(buf, "/populationStatus") == 0)
         {
@@ -148,11 +148,21 @@ int main(int argc, char* argv[])
         }
         else if(strcmp(buf, "/vaccinateNow") == 0)
         {
+            time_t now;
+            time(&now);
+            struct tm *local = localtime(&now);
 
+            date* curr; 
+            curr->day = local->tm_mday;
+            curr->month = local->tm_mon + 1;
+            curr->year = local->tm_year + 1900;
+            if(fgets(buf, 100, stdin) != NULL)
+                vaccinateNow(buf, virList, curr);
         }
         else if(strcmp(buf, "/list-nonVaccinated-Persons") == 0)
         {
-
+            if(fgets(buf, 100,stdin) != NULL)
+                listNonVacc(buf, virList);
         }
         else if(strcmp(buf, "/exit") == 0)
         {
